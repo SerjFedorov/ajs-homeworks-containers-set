@@ -1,4 +1,4 @@
-import Character from '../character';
+import Character from '../app';
 import Team from '../app';
 
 test('Check error: Персонаж уже существует в команде', () => {
