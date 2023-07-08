@@ -1,25 +1,36 @@
-import Validator from '../app';
+import Character from '../character';
+import Team from '../app';
 
-describe('validator', () => {
-  test('Допустимы только латинские буквы, символы тире -, подчёркивания _ и цифры (0-9);', () => {
-    const validator = new Validator();
-    const str = 'hello%wu';
-    const expected = 'Допустимы только латинские буквы, символы тире -, подчёркивания _ и цифры (0-9);';
+test('Check error: Персонаж уже существует в команде', () => {
+  expect(() => {
+    const team = new Team();
+    const character1 = new Character('Andy', 'Daemon');
+    const character2 = new Character('Tim', 'Daemon');
 
-    expect(validator.validateUsername(str)).toEqual(expected);
-  });
-  test('Имя не должно содержать подряд более трёх цифр, а также начинаться и заканчиваться цифрами, символами подчёркивания или тире.', () => {
-    const validator = new Validator();
-    const str = '-hbjkl111hghfuy_';
-    const expected = 'Имя не должно содержать подряд более трёх цифр, а также начинаться и заканчиваться цифрами, символами подчёркивания или тире.';
+    team.add(character1);
+    team.add(character2);
+    team.add(character2);
+  }).toThrow('Персонаж уже существует в команде');
+});
 
-    expect(validator.validateUsername(str)).toEqual(expected);
-  });
-  test('Все условия выполнены', () => {
-    const validator = new Validator();
-    const str = 'true_us1-ername';
-    const expected = 'Все условия выполнены';
+test('Test multiple character additions', () => {
+  const team = new Team();
+  const character1 = new Character('Andy', 'Daemon');
+  const character2 = new Character('Tim', 'Daemon');
+  const character3 = new Character('Serg', 'Daemon');
 
-    expect(validator.validateUsername(str)).toEqual(expected);
-  });
+  team.addAll([character1, character2, character3]);
+
+  expect(team.members.size).toBe(3);
+});
+
+test('Checking method toArray', () => {
+  const team = new Team();
+  const character1 = new Character('Andy', 'Daemon');
+  const character2 = new Character('Tim', 'Daemon');
+  const character3 = new Character('Serg', 'Daemon');
+
+  team.addAll([character1, character2, character3]);
+
+  expect(team.toArray()).toEqual([character1, character2, character3]);
 });
